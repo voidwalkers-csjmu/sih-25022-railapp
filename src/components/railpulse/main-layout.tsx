@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { Bot, LineChart, List, Wrench } from 'lucide-react';
+import { Bot, LineChart, List, Wrench, Database } from 'lucide-react';
 import { useSimulation } from '@/hooks/use-simulation';
 import SimulationMap from './map';
 import SimulationControls from './controls';
@@ -28,6 +28,7 @@ import TrainDetailsPanel from './train-details';
 import EventLog from './event-log';
 import { DisruptionTool } from './disruption-tool';
 import { PredictiveDelayTool } from './delay-predictor';
+import { DataLoader } from './data-loader';
 
 export function MainLayout() {
   const simulation = useSimulation();
@@ -54,7 +55,11 @@ export function MainLayout() {
         <SidebarContent asChild>
           <Tabs defaultValue="analytics" className="h-full w-full">
             <div className="p-2 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:pt-2">
-              <TabsList className="grid w-full grid-cols-3 group-data-[collapsible=icon]:grid-cols-1">
+              <TabsList className="grid w-full grid-cols-4 group-data-[collapsible=icon]:grid-cols-1">
+                <TabsTrigger value="data" className="group-data-[collapsible=icon]:h-8">
+                  <Database className="group-data-[collapsible=icon]:size-4" />
+                  <span className="truncate group-data-[collapsible=icon]:hidden">Data</span>
+                </TabsTrigger>
                 <TabsTrigger value="analytics" className="group-data-[collapsible=icon]:h-8">
                   <LineChart className="group-data-[collapsible=icon]:size-4" />
                   <span className="truncate group-data-[collapsible=icon]:hidden">Analytics</span>
@@ -70,6 +75,13 @@ export function MainLayout() {
               </TabsList>
             </div>
             <Separator className="group-data-[collapsible=icon]:hidden" />
+
+            <TabsContent value="data" className="m-0 h-full">
+              <DataLoader
+                onDataLoaded={simulation.loadCustomData}
+                onResetToDefault={simulation.resetToDefaultData}
+              />
+            </TabsContent>
             
             <TabsContent value="analytics" className="m-0 h-full">
                <AnalyticsDashboard trains={simulation.trains} time={simulation.time} />

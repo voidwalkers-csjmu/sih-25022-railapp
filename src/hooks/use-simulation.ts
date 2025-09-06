@@ -8,6 +8,11 @@ class EventQueue {
   private queue: any[] = [];
   private eventCounter = 0;
 
+  clear() {
+    this.queue = [];
+    this.eventCounter = 0;
+  }
+
   push(time: number, event: string, train: Train, meta: any) {
     this.eventCounter++;
     this.queue.push({ time, id: this.eventCounter, event, train, meta });
@@ -20,6 +25,10 @@ class EventQueue {
 
   isEmpty() {
     return this.queue.length === 0;
+  }
+
+  get queueData() {
+    return this.queue;
   }
 }
 
@@ -48,20 +57,27 @@ export const useSimulation = () => {
 
   const eventQueue = useRef(new EventQueue());
   const simulationTimer = useRef<NodeJS.Timeout | null>(null);
+  
+  const stopSimulation = () => {
+      if (simulationTimer.current) {
+        clearInterval(simulationTimer.current);
+        simulationTimer.current = null;
+      }
+      setSimulationState(prev => ({...prev, isRunning: false}));
+  }
 
-  const logEvent = (train_id: string, event_type: string, location: string, reason: string | null = null) => {
+  const logEvent = (time: number, train_id: string, event_type: string, location: string, reason: string | null = null) => {
     setSimulationState(prevState => ({
       ...prevState,
-      events: [{ time: prevState.time, train_id, event: event_type, location, reason }, ...prevState.events],
+      events: [{ time, train_id, event: event_type, location, reason }, ...prevState.events],
     }));
   };
   
-  const resetSimulation = useCallback(() => {
-    if (simulationTimer.current) {
-        clearInterval(simulationTimer.current);
-    }
-    eventQueue.current = new EventQueue();
-    const loadedTrains: Train[] = initialTrains.map(t => ({
+  const resetSimulation = useCallback((newStations: Record<string, Station>, newSections: Record<string, Section>, newTrains: Train[]) => {
+    stopSimulation();
+    eventQueue.current.clear();
+    
+    const loadedTrains: Train[] = newTrains.map(t => ({
       ...t,
       status: 'waiting',
       delay_s: 0,
@@ -75,6 +91,10 @@ export const useSimulation = () => {
       eventQueue.current.push(train.depart_time_s, 'depart', train, {});
     });
 
+    setStations(newStations);
+    setSections(newSections);
+    setInitialTrains(newTrains);
+
     setSimulationState({
       time: 0,
       trains: loadedTrains,
@@ -84,48 +104,62 @@ export const useSimulation = () => {
       selectedTrain: null,
     });
 
-  }, [initialTrains]);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const stationsRes = await fetch('/data/stations.json');
-      const stationsData: Station[] = await stationsRes.json();
-      const stationsMap = stationsData.reduce((acc, st) => {
-        acc[st.code] = { ...st, occupied_platforms: [] };
-        return acc;
-      }, {} as Record<string, Station>);
-      setStations(stationsMap);
-
-      const sectionsRes = await fetch('/data/sections.json');
-      const sectionsData: Section[] = await sectionsRes.json();
-      const sectionsMap = sectionsData.reduce((acc, sec) => {
-        acc[`${sec.u}-${sec.v}`] = { ...sec, blocks: [], active_disruptions: [] };
-        if (sec.line_type === 'double') {
-           acc[`${sec.v}-${sec.u}`] = { ...sec, u: sec.v, v: sec.u, blocks: [], active_disruptions: [] };
-        }
-        return acc;
-      }, {} as Record<string, Section>);
-      setSections(sectionsMap);
-
-      const trainsRes = await fetch('/data/trains.json');
-      const trainsData: Train[] = await trainsRes.json();
-      setInitialTrains(trainsData);
-    };
-    loadData();
   }, []);
 
-  useEffect(() => {
-    if (initialTrains.length > 0) {
-      resetSimulation();
-    }
-  }, [initialTrains, resetSimulation]);
+  const loadDefaultData = useCallback(async () => {
+    const stationsRes = await fetch('/data/stations.json');
+    const stationsData: Station[] = await stationsRes.json();
+    const stationsMap = stationsData.reduce((acc, st) => {
+      acc[st.code] = { ...st, occupied_platforms: [] };
+      return acc;
+    }, {} as Record<string, Station>);
 
+    const sectionsRes = await fetch('/data/sections.json');
+    const sectionsData: Section[] = await sectionsRes.json();
+    const sectionsMap = sectionsData.reduce((acc, sec) => {
+      acc[`${sec.u}-${sec.v}`] = { ...sec, blocks: [], active_disruptions: [] };
+      if (sec.line_type === 'double') {
+          acc[`${sec.v}-${sec.u}`] = { ...sec, u: sec.v, v: sec.u, blocks: [], active_disruptions: [] };
+      }
+      return acc;
+    }, {} as Record<string, Section>);
+
+    const trainsRes = await fetch('/data/trains.json');
+    const trainsData: Train[] = await trainsRes.json();
+    
+    resetSimulation(stationsMap, sectionsMap, trainsData);
+  }, [resetSimulation]);
+  
+  useEffect(() => {
+    loadDefaultData();
+  }, [loadDefaultData]);
+
+
+  const loadCustomData = useCallback(({ stations: stationsData, sections: sectionsData, trains: trainsData }: { stations: Station[], sections: Section[], trains: Train[]}) => {
+    const stationsMap = stationsData.reduce((acc, st) => {
+      acc[st.code] = { ...st, occupied_platforms: [] };
+      return acc;
+    }, {} as Record<string, Station>);
+    
+    const sectionsMap = sectionsData.reduce((acc, sec) => {
+      acc[`${sec.u}-${sec.v}`] = { ...sec, blocks: [], active_disruptions: [] };
+      if (sec.line_type === 'double') {
+         acc[`${sec.v}-${sec.u}`] = { ...sec, u: sec.v, v: sec.u, blocks: [], active_disruptions: [] };
+      }
+      return acc;
+    }, {} as Record<string, Section>);
+
+    resetSimulation(stationsMap, sectionsMap, trainsData);
+  }, [resetSimulation]);
+
+  const resetToDefaultData = useCallback(() => {
+    loadDefaultData();
+  }, [loadDefaultData]);
 
   const processNextEvent = useCallback(() => {
     if (eventQueue.current.isEmpty()) {
-      setSimulationState(prevState => ({ ...prevState, isRunning: false }));
-      if (simulationTimer.current) clearInterval(simulationTimer.current);
-      logEvent('System', 'SIM_END', 'n/a', 'Event queue is empty.');
+      stopSimulation();
+      logEvent(simulationState.time, 'System', 'SIM_END', 'n/a', 'Event queue is empty.');
       return;
     }
 
@@ -143,19 +177,19 @@ export const useSimulation = () => {
     // Simplified event handlers
     switch (event.event) {
       case 'depart':
-        handleDepart(event.train);
+        handleDepart(event.train, event.time);
         break;
       case 'arrive_station':
-        handleArriveStation(event.train);
+        handleArriveStation(event.train, event.time);
         break;
       case 'arrive_final':
-        handleArriveFinal(event.train);
+        handleArriveFinal(event.train, event.time);
         break;
     }
-  }, []);
+  }, [simulationState.time]);
   
-  const handleDepart = (train: Train) => {
-    logEvent(train.train_id, 'DEPART_JOURNEY', train.route[0]);
+  const handleDepart = (train: Train, time: number) => {
+    logEvent(time, train.train_id, 'DEPART_JOURNEY', train.route[0]);
     train.status = 'running';
     train.current_section_idx = 0;
     const sectionIdx = train.current_section_idx;
@@ -175,15 +209,15 @@ export const useSimulation = () => {
                 });
                 return {...prevState, trains: updatedTrains};
             });
-            eventQueue.current.push(simulationState.time + travelTime, 'arrive_station', train, {});
+            eventQueue.current.push(time + travelTime, 'arrive_station', train, { departureTime: time });
         }
     }
   };
 
-  const handleArriveStation = (train: Train) => {
+  const handleArriveStation = (train: Train, time: number) => {
     const sectionIdx = train.current_section_idx ?? 0;
     const stationCode = train.route[sectionIdx + 1];
-    logEvent(train.train_id, 'ARRIVE_STATION', stationCode);
+    logEvent(time, train.train_id, 'ARRIVE_STATION', stationCode);
     
     train.current_section_idx = sectionIdx + 1;
     const nextSectionIdx = train.current_section_idx;
@@ -200,25 +234,26 @@ export const useSimulation = () => {
 
     if (nextSectionIdx < train.route.length - 1) {
         const dwellTime = stations[stationCode]?.dwell_mean_s || 60;
-        const departTime = simulationState.time + dwellTime;
+        const departTime = time + dwellTime;
         const u = train.route[nextSectionIdx];
         const v = train.route[nextSectionIdx + 1];
         const sectionKey = `${u}-${v}`;
         const section = sections[sectionKey];
         if (section) {
             const travelTime = (section.length_km / (train.vmax_kmph * 0.8)) * 3600;
-            logEvent(train.train_id, 'DEPART_STATION', u, `Dwell for ${dwellTime}s`);
-            eventQueue.current.push(departTime + travelTime, nextSectionIdx + 1 === train.route.length - 1 ? 'arrive_final' : 'arrive_station', train, {});
+            logEvent(time, train.train_id, 'DEPART_STATION', u, `Dwell for ${dwellTime}s`);
+            const nextEventType = nextSectionIdx + 1 === train.route.length - 1 ? 'arrive_final' : 'arrive_station';
+            eventQueue.current.push(departTime + travelTime, nextEventType, train, { departureTime: departTime });
         }
     } else {
-        eventQueue.current.push(simulationState.time + 1, 'arrive_final', train, {});
+        eventQueue.current.push(time + 1, 'arrive_final', train, {});
     }
   };
 
-  const handleArriveFinal = (train: Train) => {
+  const handleArriveFinal = (train: Train, time: number) => {
     train.status = 'finished';
     const finalStation = train.route[train.route.length - 1];
-    logEvent(train.train_id, 'ARRIVE_FINAL', finalStation);
+    logEvent(time, train.train_id, 'ARRIVE_FINAL', finalStation);
     setSimulationState(prevState => {
         const updatedTrains = prevState.trains.map(t => {
             if (t.train_id === train.train_id) {
@@ -232,7 +267,7 @@ export const useSimulation = () => {
 
   const runSimulationStep = useCallback(() => {
     const timeIncrement = 1 * simulationState.speed;
-    const nextEventTime = eventQueue.current.isEmpty() ? Infinity : eventQueue.current.queue[0].time;
+    const nextEventTime = eventQueue.current.isEmpty() ? Infinity : eventQueue.current.queueData[0].time;
 
     if (simulationState.time + timeIncrement >= nextEventTime) {
       processNextEvent();
@@ -252,10 +287,13 @@ export const useSimulation = () => {
                     const section = sections[sectionKey];
                     if (section) {
                          const travelTime = (section.length_km / (t.vmax_kmph * 0.8)) * 3600;
-                         const lastEvent = eventQueue.current.queue.find(e => e.train.train_id === t.train_id);
-                         const departureTime = (lastEvent?.time - travelTime) || prevState.time;
+                         // Find the departure event for the current section
+                         const event = [...eventQueue.current.queueData, ...prevState.events].find(e => e.train?.train_id === t.train_id || e.train_id === t.train_id);
+                         const departureTime = event?.meta?.departureTime || t.depart_time_s;
                          const progress = Math.min(1, (prevState.time - departureTime) / travelTime);
-                         return {...t, location: {type: 'section', u, v, progress}};
+                         if (progress >= 0) {
+                            return {...t, location: {type: 'section', u, v, progress}};
+                         }
                     }
                 }
             }
@@ -272,11 +310,10 @@ export const useSimulation = () => {
         if (newIsRunning) {
             if (simulationTimer.current) clearInterval(simulationTimer.current);
             simulationTimer.current = setInterval(runSimulationStep, 100);
-            logEvent('System', 'SIM_START', 'n/a', null);
+            logEvent(prevState.time, 'System', 'SIM_START', 'n/a', null);
         } else {
-            if (simulationTimer.current) clearInterval(simulationTimer.current);
-            simulationTimer.current = null;
-            logEvent('System', 'SIM_PAUSE', 'n/a', null);
+            stopSimulation();
+            logEvent(prevState.time, 'System', 'SIM_PAUSE', 'n/a', null);
         }
         return { ...prevState, isRunning: newIsRunning };
     });
@@ -303,9 +340,11 @@ export const useSimulation = () => {
     stations,
     sections,
     togglePlayPause,
-    resetSimulation,
+    resetSimulation: () => resetToDefaultData(),
     setSpeed,
     setSelectedTrain,
     updateTrain,
+    loadCustomData,
+    resetToDefaultData,
   };
 };

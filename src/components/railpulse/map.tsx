@@ -19,12 +19,12 @@ interface SimulationMapProps {
   selectedTrain: Train | null;
 }
 
-const stationCoordinates: Record<string, { x: number; y: number }> = {
-    SBC: { x: 15, y: 50 }, YPR: { x: 20, y: 45 }, TK: { x: 28, y: 37 },
-    ASK: { x: 40, y: 28 }, RRB: { x: 50, y: 30 }, DVG: { x: 65, y: 35 },
-    HRR: { x: 70, y: 38 }, RNR: { x: 75, y: 41 }, HVR: { x: 80, y: 45 },
-    UBL: { x: 90, y: 55 }, DMM: { x: 25, y: 65 }, ATP: { x: 30, y: 75 },
-    GTL: { x: 40, y: 85 }, HPT: { x: 50, y: 75 }, GDG: { x: 65, y: 65 },
+const stationCoordinates: Record<string, { lat: number; lon: number }> = {
+    SBC: { lat: 12.9767, lon: 77.5667 }, YPR: { lat: 13.0234, lon: 77.5516 }, TK: { lat: 13.3396, lon: 77.1009 },
+    ASK: { lat: 13.3155, lon: 76.2585 }, RRB: { lat: 13.6069, lon: 75.9722 }, DVG: { lat: 14.4644, lon: 75.9218 },
+    HRR: { lat: 14.5150, lon: 75.8033 }, RNR: { lat: 14.6186, lon: 75.6247 }, HVR: { lat: 14.7937, lon: 75.4018 },
+    UBL: { lat: 15.3535, lon: 75.1436 }, DMM: { lat: 14.4144, lon: 77.7214 }, ATP: { lat: 14.6816, lon: 77.6006 },
+    GTL: { lat: 15.1764, lon: 77.3653 }, HPT: { lat: 15.2644, lon: 76.3984 }, GDG: { lat: 15.4224, lon: 75.6262 },
 };
 
 const TrainMarker = ({ train, x, y, onSelectTrain, isSelected }: { train: Train; x: number; y: number; onSelectTrain: (train: Train) => void; isSelected: boolean }) => (
@@ -60,12 +60,41 @@ const TrainMarker = ({ train, x, y, onSelectTrain, isSelected }: { train: Train;
 
 
 const SimulationMap: React.FC<SimulationMapProps> = ({ stations, sections, trains, onSelectTrain, selectedTrain }) => {
-  const stationElements = useMemo(() => {
-    return Object.values(stations).map(station => {
-      const pos = stationCoordinates[station.code];
+  const { stationElements, sectionElements, trainElements, viewBox } = useMemo(() => {
+    const coords = Object.values(stationCoordinates);
+    if (coords.length === 0) {
+      return { stationElements: [], sectionElements: [], trainElements: [], viewBox: "0 0 1000 1000" };
+    }
+
+    const minLat = Math.min(...coords.map(c => c.lat));
+    const maxLat = Math.max(...coords.map(c => c.lat));
+    const minLon = Math.min(...coords.map(c => c.lon));
+    const maxLon = Math.max(...coords.map(c => c.lon));
+
+    const latRange = maxLat - minLat;
+    const lonRange = maxLon - minLon;
+
+    const width = 1000;
+    const height = 1000;
+    const padding = 50;
+
+    const getPosition = (lat: number, lon: number) => {
+      const x = padding + ((lon - minLon) / lonRange) * (width - 2 * padding);
+      const y = padding + ((maxLat - lat) / latRange) * (height - 2 * padding);
+      return { x, y };
+    };
+
+    const stationPositions: Record<string, { x: number; y: number }> = {};
+    Object.keys(stationCoordinates).forEach(code => {
+      const { lat, lon } = stationCoordinates[code];
+      stationPositions[code] = getPosition(lat, lon);
+    });
+    
+    const stationElements = Object.values(stations).map(station => {
+      const pos = stationPositions[station.code];
       if (!pos) return null;
       return (
-        <g key={station.code} transform={`translate(${pos.x * 10}, ${pos.y * 10})`}>
+        <g key={station.code} transform={`translate(${pos.x}, ${pos.y})`}>
           <circle r="5" fill="hsl(var(--primary))" />
           <text x="8" y="4" className="text-xs font-semibold fill-foreground" >
             {station.code}
@@ -73,13 +102,11 @@ const SimulationMap: React.FC<SimulationMapProps> = ({ stations, sections, train
         </g>
       );
     });
-  }, [stations]);
 
-  const sectionElements = useMemo(() => {
     const drawnSections = new Set<string>();
-    return Object.values(sections).map(section => {
-      const pos1 = stationCoordinates[section.u];
-      const pos2 = stationCoordinates[section.v];
+    const sectionElements = Object.values(sections).map(section => {
+      const pos1 = stationPositions[section.u];
+      const pos2 = stationPositions[section.v];
       const key1 = `${section.u}-${section.v}`;
       const key2 = `${section.v}-${section.u}`;
       
@@ -92,46 +119,47 @@ const SimulationMap: React.FC<SimulationMapProps> = ({ stations, sections, train
       return (
         <line
           key={key1}
-          x1={pos1.x * 10}
-          y1={pos1.y * 10}
-          x2={pos2.x * 10}
-          y2={pos2.y * 10}
+          x1={pos1.x}
+          y1={pos1.y}
+          x2={pos2.x}
+          y2={pos2.y}
           stroke={isSingle ? "hsl(var(--accent))" : "hsl(var(--muted-foreground))"}
           strokeWidth="2"
           strokeDasharray={isSingle ? "4 2" : "none"}
         />
       );
     });
-  }, [sections]);
 
-  const trainElements = useMemo(() => {
-    return trains.map(train => {
+    const trainElements = trains.map(train => {
       if (!train.location) return null;
 
       let x = 0, y = 0;
 
       if (train.location.type === 'station') {
-        const pos = stationCoordinates[train.location.code];
+        const pos = stationPositions[train.location.code];
         if (!pos) return null;
-        x = pos.x * 10;
-        y = pos.y * 10;
+        x = pos.x;
+        y = pos.y;
       } else if (train.location.type === 'section') {
-        const pos1 = stationCoordinates[train.location.u];
-        const pos2 = stationCoordinates[train.location.v];
+        const pos1 = stationPositions[train.location.u];
+        const pos2 = stationPositions[train.location.v];
         if (!pos1 || !pos2) return null;
         const progress = train.location.progress || 0;
-        x = pos1.x * 10 + (pos2.x * 10 - pos1.x * 10) * progress;
-        y = pos1.y * 10 + (pos2.y * 10 - pos1.y * 10) * progress;
+        x = pos1.x + (pos2.x - pos1.x) * progress;
+        y = pos1.y + (pos2.y - pos1.y) * progress;
       }
 
       return <TrainMarker key={train.train_id} train={train} x={x} y={y} onSelectTrain={onSelectTrain} isSelected={selectedTrain?.train_id === train.train_id}/>;
     });
-  }, [trains, onSelectTrain, selectedTrain]);
+
+    return { stationElements, sectionElements, trainElements, viewBox: `0 0 ${width} ${height}` };
+
+  }, [stations, sections, trains, onSelectTrain, selectedTrain]);
 
   return (
     <div className="w-full h-full bg-card rounded-lg overflow-hidden">
       <TooltipProvider>
-        <svg width="100%" height="100%" viewBox="0 0 1000 1000" className='bg-grid-slate-100 dark:bg-grid-slate-900'>
+        <svg width="100%" height="100%" viewBox={viewBox} className='bg-grid-slate-100 dark:bg-grid-slate-900'>
             <rect width="100%" height="100%" fill="hsl(var(--background))" />
             <g>{sectionElements}</g>
             <g>{stationElements}</g>
