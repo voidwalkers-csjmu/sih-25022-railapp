@@ -1,0 +1,17 @@
+[
+  {"code":"SBC","name":"KSR Bengaluru","has_loop":true,"num_loops":4,"num_platforms":5,"max_train_len_m":700,"is_junction":true,"dwell_mean_s":60,"dwell_std_dev_s":15},
+  {"code":"YPR","name":"Yesvantpur","has_loop":true,"num_loops":3,"num_platforms":4,"max_train_len_m":700,"is_junction":true,"dwell_mean_s":45,"dwell_std_dev_s":10},
+  {"code":"TK","name":"Tumakuru","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
+  {"code":"ASK","name":"Arsikere Jn","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":true,"dwell_mean_s":45,"dwell_std_dev_s":10},
+  {"code":"RRB","name":"Birur Jn","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":true,"dwell_mean_s":45,"dwell_std_dev_s":10},
+  {"code":"DVG","name":"Davangere","has_loop":true,"num_loops":3,"num_platforms":2,"max_train_len_m":700,"is_junction":false,"dwell_mean_s":45,"dwell_std_dev_s":10},
+  {"code":"HRR","name":"Harihar","has_loop":true,"num_loops":1,"num_platforms":1,"max_train_len_m":600,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
+  {"code":"RNR","name":"Ranibennur","has_loop":true,"num_loops":1,"num_platforms":1,"max_train_len_m":600,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
+  {"code":"HVR","name":"Haveri","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
+  {"code":"UBL","name":"SSS Hubballi","has_loop":true,"num_loops":4,"num_platforms":5,"max_train_len_m":700,"is_junction":true,"dwell_mean_s":60,"dwell_std_dev_s":15},
+  {"code":"DMM","name":"Dharmavaram","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
+  {"code":"ATP","name":"Anantapur","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
+  {"code":"GTL","name":"Guntakal Jn","has_loop":true,"num_loops":3,"num_platforms":4,"max_train_len_m":700,"is_junction":true,"dwell_mean_s":60,"dwell_std_dev_s":15},
+  {"code":"HPT","name":"Hosapete","has_loop":true,"num_loops":1,"num_platforms":1,"max_train_len_m":600,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
+  {"code":"GDG","name":"Gadag Jn","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5}
+]

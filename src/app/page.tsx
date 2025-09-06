@@ -1,3 +1,9 @@
+import { MainLayout } from '@/components/railpulse/main-layout';
+
 export default function Home() {
-  return <></>;
+  return (
+    <main>
+      <MainLayout />
+    </main>
+  );
 }
