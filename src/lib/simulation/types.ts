@@ -33,7 +33,7 @@ export interface Section {
   vmax_kmph: number;
   signalling: string;
   gradient: number;
-  blocks: Block[];
+  occupied_by: string | null;
   original_vmax_kmph?: number;
   active_disruptions: Disruption[];
 }
@@ -55,6 +55,7 @@ export interface Train {
   current_speed_ms?: number;
   distance_on_section?: number;
   current_section_idx?: number;
+  last_event_time?: number;
   location?: { type: 'station'; code: string } | { type: 'section'; u: string; v: string; progress: number };
 }
 

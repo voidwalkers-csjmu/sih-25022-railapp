@@ -32,10 +32,9 @@ import { DataLoader } from './data-loader';
 
 export function MainLayout() {
   const simulation = useSimulation();
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <SidebarProvider defaultOpen onOpenChange={setSidebarOpen}>
+    <SidebarProvider defaultOpen>
       <Sidebar
         variant="inset"
         collapsible="icon"

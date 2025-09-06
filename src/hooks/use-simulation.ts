@@ -120,9 +120,9 @@ export const useSimulation = () => {
     const sectionsRes = await fetch('/data/sections.json');
     const sectionsData: Section[] = await sectionsRes.json();
     const sectionsMap = sectionsData.reduce((acc, sec) => {
-      acc[`${sec.u}-${sec.v}`] = { ...sec, blocks: [], active_disruptions: [] };
+      acc[`${sec.u}-${sec.v}`] = { ...sec, occupied_by: null, active_disruptions: [] };
       if (sec.line_type === 'double') {
-          acc[`${sec.v}-${sec.u}`] = { ...sec, u: sec.v, v: sec.u, blocks: [], active_disruptions: [] };
+          acc[`${sec.v}-${sec.u}`] = { ...sec, u: sec.v, v: sec.u, occupied_by: null, active_disruptions: [] };
       }
       return acc;
     }, {} as Record<string, Section>);
@@ -150,9 +150,9 @@ export const useSimulation = () => {
     }, {} as Record<string, Station>);
     
     const sectionsMap = sectionsData.reduce((acc, sec) => {
-      acc[`${sec.u}-${sec.v}`] = { ...sec, blocks: [], active_disruptions: [] };
+      acc[`${sec.u}-${sec.v}`] = { ...sec, occupied_by: null, active_disruptions: [] };
       if (sec.line_type === 'double') {
-         acc[`${sec.v}-${sec.u}`] = { ...sec, u: sec.v, v: sec.u, blocks: [], active_disruptions: [] };
+         acc[`${sec.v}-${sec.u}`] = { ...sec, u: sec.v, v: sec.u, occupied_by: null, active_disruptions: [] };
       }
       return acc;
     }, {} as Record<string, Section>);
@@ -171,10 +171,29 @@ export const useSimulation = () => {
             break;
         }
 
-        eventQueue.current.pop();
+        const train = stateRef.current.trains.find(t => t.train_id === event.trainId);
+        if (!train) {
+          eventQueue.current.pop();
+          continue;
+        };
+
+        if (event.event === 'enter_section') {
+            const { u, v } = event.meta;
+            const sectionKey = `${u}-${v}`;
+            const reverseSectionKey = `${v}-${u}`;
+            
+            const sectionIsOccupied = sections[sectionKey]?.occupied_by;
+            const reverseIsOccupied = sections[reverseSectionKey]?.occupied_by;
+            const isSingleLine = sections[sectionKey]?.line_type === 'single';
+
+            if ((isSingleLine && (sectionIsOccupied || reverseIsOccupied)) || sectionIsOccupied) {
+                event.time = time + 10; // Re-queue for 10s later
+                eventQueue.current.queue.sort((a, b) => a.time - b.time || a.id - b.id);
+                continue; 
+            }
+        }
         
-        let train = stateRef.current.trains.find(t => t.train_id === event.trainId);
-        if (!train) continue;
+        eventQueue.current.pop();
 
         switch (event.event) {
             case 'depart':
@@ -201,7 +220,9 @@ export const useSimulation = () => {
     const sectionKey = `${u}-${v}`;
     const section = sections[sectionKey];
     if (!section) return;
-    
+
+    sections[sectionKey].occupied_by = train.train_id;
+
     logEvent(time, train.train_id, 'ENTER_SECTION', `${u}->${v}`);
 
     const travelTime = (section.length_km / train.vmax_kmph) * 3600 * 1.2; // Add 20% buffer
@@ -218,12 +239,20 @@ export const useSimulation = () => {
         } : t),
     }));
 
-    eventQueue.current.push(arrivalTime, 'arrive_station', train.train_id, {});
+    eventQueue.current.push(arrivalTime, 'arrive_station', train.train_id, {u, v});
   };
 
-  const handleArriveStation = (train: Train, time: number) => {
+  const handleArriveStation = (train: Train, time: number, u_from?: string, v_from?: string) => {
     const currentSectionIdx = train.current_section_idx || 0;
     const stationCode = train.route[currentSectionIdx + 1];
+
+    if (train.location?.type === 'section') {
+        const sectionKey = `${train.location.u}-${train.location.v}`;
+        if (sections[sectionKey]) {
+            sections[sectionKey].occupied_by = null;
+        }
+    }
+
     logEvent(time, train.train_id, 'ARRIVE_STATION', stationCode);
 
     const isFinalStation = (currentSectionIdx + 1) === train.route.length - 1;
