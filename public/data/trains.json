@@ -1,11 +1,42 @@
-
 [
-  {"train_id": "12079", "category": "Jan Shatabdi", "priority": 1, "vmax_kmph": 130, "acceleration_ms2": 0.5, "base_deceleration_ms2": 0.8, "length_m": 450, "route": ["SBC", "YPR", "TK", "ASK", "RRB", "DVG", "UBL"], "depart_time_s": 600},
-  {"train_id": "16508", "category": "Express", "priority": 2, "vmax_kmph": 110, "acceleration_ms2": 0.4, "base_deceleration_ms2": 0.7, "length_m": 550, "route": ["SBC", "YPR", "TK", "ASK", "RRB", "DVG", "UBL"], "depart_time_s": 1200},
-  {"train_id": "16227", "category": "Express", "priority": 2, "vmax_kmph": 110, "acceleration_ms2": 0.4, "base_deceleration_ms2": 0.7, "length_m": 500, "route": ["SBC", "YPR", "DMM", "ATP", "GTL"], "depart_time_s": 1800},
-  {"train_id": "56911", "category": "Passenger", "priority": 3, "vmax_kmph": 90, "acceleration_ms2": 0.3, "base_deceleration_ms2": 0.6, "length_m": 350, "route": ["SBC", "YPR", "TK", "ASK"], "depart_time_s": 2400},
-  {"train_id": "17316", "category": "Express", "priority": 2, "vmax_kmph": 110, "acceleration_ms2": 0.4, "base_deceleration_ms2": 0.7, "length_m": 600, "route": ["UBL", "HVR", "RNR", "HRR", "DVG", "RRB", "ASK", "TK", "YPR", "SBC"], "depart_time_s": 300},
-  {"train_id": "07340", "category": "DEMU", "priority": 3, "vmax_kmph": 100, "acceleration_ms2": 0.6, "base_deceleration_ms2": 0.9, "length_m": 250, "route": ["GTL", "HPT", "GDG", "UBL"], "depart_time_s": 900},
-  {"train_id": "GOODS-1", "category": "Goods", "priority": 4, "vmax_kmph": 75, "acceleration_ms2": 0.2, "base_deceleration_ms2": 0.5, "length_m": 800, "route": ["UBL", "DVG", "ASK", "YPR"], "depart_time_s": 3000},
-  {"train_id": "GOODS-2", "category": "Goods", "priority": 4, "vmax_kmph": 75, "acceleration_ms2": 0.2, "base_deceleration_ms2": 0.5, "length_m": 800, "route": ["YPR", "DMM", "GTL"], "depart_time_s": 3600}
+  {
+    "train_id": "Train-A1", "category": "Express", "priority": 2, "vmax_kmph": 120, "acceleration_ms2": 0.2, "base_deceleration_ms2": 0.4, "length_m": 450,
+    "route": ["YPR", "DMM", "ATP", "GTL", "HPT", "GDG", "UBL"],
+    "depart_time_s": 0
+  },
+  {
+    "train_id": "Train-A2", "category": "Passenger", "priority": 3, "vmax_kmph": 100, "acceleration_ms2": 0.3, "base_deceleration_ms2": 0.5, "length_m": 300,
+    "route": ["UBL", "GDG", "HPT", "GTL", "ATP", "DMM", "YPR"],
+    "depart_time_s": 600
+  },
+  {
+    "train_id": "Train-B1", "category": "Superfast", "priority": 1, "vmax_kmph": 130, "acceleration_ms2": 0.25, "base_deceleration_ms2": 0.45, "length_m": 500,
+    "route": ["YPR", "TK", "ASK", "RRB", "DVG", "HRR", "RNR", "HVR", "UBL"],
+    "depart_time_s": 300
+  },
+  {
+    "train_id": "Train-B2", "category": "Express", "priority": 2, "vmax_kmph": 110, "acceleration_ms2": 0.2, "base_deceleration_ms2": 0.4, "length_m": 400,
+    "route": ["UBL", "HVR", "RNR", "HRR", "DVG", "RRB", "ASK", "TK", "YPR"],
+    "depart_time_s": 900
+  },
+  {
+    "train_id": "Train-C1", "category": "Express", "priority": 2, "vmax_kmph": 120, "acceleration_ms2": 0.2, "base_deceleration_ms2": 0.4, "length_m": 450,
+    "route": ["YPR", "DMM", "ATP", "GTL", "HPT", "GDG", "UBL"],
+    "depart_time_s": 1200
+  },
+  {
+    "train_id": "Train-C2", "category": "Passenger", "priority": 3, "vmax_kmph": 100, "acceleration_ms2": 0.3, "base_deceleration_ms2": 0.5, "length_m": 300,
+    "route": ["UBL", "GDG", "HPT", "GTL", "ATP", "DMM", "YPR"],
+    "depart_time_s": 1800
+  },
+  {
+    "train_id": "Train-D1", "category": "Superfast", "priority": 1, "vmax_kmph": 130, "acceleration_ms2": 0.25, "base_deceleration_ms2": 0.45, "length_m": 500,
+    "route": ["YPR", "TK", "ASK", "RRB", "DVG", "HRR", "RNR", "HVR", "UBL"],
+    "depart_time_s": 1500
+  },
+  {
+    "train_id": "Train-D2", "category": "Express", "priority": 2, "vmax_kmph": 110, "acceleration_ms2": 0.2, "base_deceleration_ms2": 0.4, "length_m": 400,
+    "route": ["UBL", "HVR", "RNR", "HRR", "DVG", "RRB", "ASK", "TK", "YPR"],
+    "depart_time_s": 2100
+  }
 ]
