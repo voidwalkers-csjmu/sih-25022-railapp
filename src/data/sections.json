@@ -1,0 +1,18 @@
+[
+    {"u": "SBC", "v": "YPR", "line_type": "double", "length_km": 6, "vmax_kmph": 60, "signalling": "automatic", "gradient": 0.002},
+    {"u": "YPR", "v": "TK", "line_type": "double", "length_km": 64, "vmax_kmph": 110, "signalling": "absolute", "gradient": -0.001},
+    {"u": "TK", "v": "ASK", "line_type": "single", "length_km": 97, "vmax_kmph": 100, "signalling": "absolute", "gradient": 0.0015},
+    {"u": "ASK", "v": "RRB", "line_type": "single", "length_km": 72, "vmax_kmph": 100, "signalling": "absolute", "gradient": 0.001},
+    {"u": "RRB", "v": "RNR", "line_type": "double", "length_km": 54, "vmax_kmph": 110, "signalling": "absolute", "gradient": -0.0005},
+    {"u": "RNR", "v": "DVG", "line_type": "double", "length_km": 36, "vmax_kmph": 110, "signalling": "absolute", "gradient": 0.0008},
+    {"u": "RNR", "v": "HRR", "line_type": "double", "length_km": 23, "vmax_kmph": 110, "signalling": "absolute", "gradient": -0.0007},
+    {"u": "HRR", "v": "DVG", "line_type": "double", "length_km": 13, "vmax_kmph": 100, "signalling": "absolute", "gradient": 0.0005},
+    {"u": "DVG", "v": "HVR", "line_type": "double", "length_km": 77, "vmax_kmph": 110, "signalling": "absolute", "gradient": 0.0012},
+    {"u": "HVR", "v": "UBL", "line_type": "double", "length_km": 75, "vmax_kmph": 110, "signalling": "absolute", "gradient": -0.001},
+    {"u": "ASK", "v": "DMM", "line_type": "single", "length_km": 150, "vmax_kmph": 90, "signalling": "absolute", "gradient": 0.002},
+    {"u": "DMM", "v": "ATP", "line_type": "double", "length_km": 34, "vmax_kmph": 120, "signalling": "absolute", "gradient": -0.0015},
+    {"u": "ATP", "v": "GTL", "line_type": "double", "length_km": 92, "vmax_kmph": 120, "signalling": "absolute", "gradient": 0.001},
+    {"u": "UBL", "v": "GDG", "line_type": "single", "length_km": 58, "vmax_kmph": 90, "signalling": "absolute", "gradient": 0.0005},
+    {"u": "GDG", "v": "HPT", "line_type": "single", "length_km": 88, "vmax_kmph": 90, "signalling": "absolute", "gradient": -0.0008},
+    {"u": "HPT", "v": "GTL", "line_type": "double", "length_km": 75, "vmax_kmph": 110, "signalling": "absolute", "gradient": 0.001}
+]
