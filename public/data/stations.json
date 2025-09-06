@@ -1,17 +1,18 @@
+
 [
-  {"code":"SBC","name":"KSR Bengaluru","has_loop":true,"num_loops":4,"num_platforms":5,"max_train_len_m":700,"is_junction":true,"dwell_mean_s":60,"dwell_std_dev_s":15},
-  {"code":"YPR","name":"Yesvantpur","has_loop":true,"num_loops":3,"num_platforms":4,"max_train_len_m":700,"is_junction":true,"dwell_mean_s":45,"dwell_std_dev_s":10},
-  {"code":"TK","name":"Tumakuru","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
-  {"code":"ASK","name":"Arsikere Jn","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":true,"dwell_mean_s":45,"dwell_std_dev_s":10},
-  {"code":"RRB","name":"Birur Jn","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":true,"dwell_mean_s":45,"dwell_std_dev_s":10},
-  {"code":"DVG","name":"Davangere","has_loop":true,"num_loops":3,"num_platforms":2,"max_train_len_m":700,"is_junction":false,"dwell_mean_s":45,"dwell_std_dev_s":10},
-  {"code":"HRR","name":"Harihar","has_loop":true,"num_loops":1,"num_platforms":1,"max_train_len_m":600,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
-  {"code":"RNR","name":"Ranibennur","has_loop":true,"num_loops":1,"num_platforms":1,"max_train_len_m":600,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
-  {"code":"HVR","name":"Haveri","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
-  {"code":"UBL","name":"SSS Hubballi","has_loop":true,"num_loops":4,"num_platforms":5,"max_train_len_m":700,"is_junction":true,"dwell_mean_s":60,"dwell_std_dev_s":15},
-  {"code":"DMM","name":"Dharmavaram","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
-  {"code":"ATP","name":"Anantapur","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
-  {"code":"GTL","name":"Guntakal Jn","has_loop":true,"num_loops":3,"num_platforms":4,"max_train_len_m":700,"is_junction":true,"dwell_mean_s":60,"dwell_std_dev_s":15},
-  {"code":"HPT","name":"Hosapete","has_loop":true,"num_loops":1,"num_platforms":1,"max_train_len_m":600,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5},
-  {"code":"GDG","name":"Gadag Jn","has_loop":true,"num_loops":2,"num_platforms":2,"max_train_len_m":650,"is_junction":false,"dwell_mean_s":30,"dwell_std_dev_s":5}
+  {"code": "SBC", "name": "KSR Bengaluru City", "has_loop": true, "num_loops": 4, "num_platforms": 10, "max_train_len_m": 700, "is_junction": true, "dwell_mean_s": 300, "dwell_std_dev_s": 60},
+  {"code": "YPR", "name": "Yesvantpur Junction", "has_loop": true, "num_loops": 2, "num_platforms": 6, "max_train_len_m": 650, "is_junction": true, "dwell_mean_s": 180, "dwell_std_dev_s": 45},
+  {"code": "TK", "name": "Tumakuru", "has_loop": true, "num_loops": 1, "num_platforms": 3, "max_train_len_m": 600, "is_junction": false, "dwell_mean_s": 120, "dwell_std_dev_s": 30},
+  {"code": "ASK", "name": "Arsikere Junction", "has_loop": true, "num_loops": 2, "num_platforms": 4, "max_train_len_m": 600, "is_junction": true, "dwell_mean_s": 150, "dwell_std_dev_s": 40},
+  {"code": "RRB", "name": "Birur Junction", "has_loop": false, "num_loops": 0, "num_platforms": 2, "max_train_len_m": 550, "is_junction": true, "dwell_mean_s": 120, "dwell_std_dev_s": 30},
+  {"code": "DVG", "name": "Davangere", "has_loop": true, "num_loops": 1, "num_platforms": 2, "max_train_len_m": 600, "is_junction": false, "dwell_mean_s": 120, "dwell_std_dev_s": 30},
+  {"code": "HRR", "name": "Harihar", "has_loop": false, "num_loops": 0, "num_platforms": 2, "max_train_len_m": 550, "is_junction": false, "dwell_mean_s": 90, "dwell_std_dev_s": 20},
+  {"code": "RNR", "name": "Ranibennur", "has_loop": false, "num_loops": 0, "num_platforms": 2, "max_train_len_m": 550, "is_junction": false, "dwell_mean_s": 90, "dwell_std_dev_s": 20},
+  {"code": "HVR", "name": "Haveri", "has_loop": false, "num_loops": 0, "num_platforms": 2, "max_train_len_m": 550, "is_junction": false, "dwell_mean_s": 90, "dwell_std_dev_s": 20},
+  {"code": "UBL", "name": "SSS Hubballi Junction", "has_loop": true, "num_loops": 3, "num_platforms": 5, "max_train_len_m": 700, "is_junction": true, "dwell_mean_s": 240, "dwell_std_dev_s": 50},
+  {"code": "DMM", "name": "Dharmavaram Junction", "has_loop": true, "num_loops": 1, "num_platforms": 3, "max_train_len_m": 600, "is_junction": true, "dwell_mean_s": 150, "dwell_std_dev_s": 30},
+  {"code": "ATP", "name": "Anantapur", "has_loop": false, "num_loops": 0, "num_platforms": 2, "max_train_len_m": 550, "is_junction": false, "dwell_mean_s": 120, "dwell_std_dev_s": 25},
+  {"code": "GTL", "name": "Guntakal Junction", "has_loop": true, "num_loops": 2, "num_platforms": 6, "max_train_len_m": 650, "is_junction": true, "dwell_mean_s": 180, "dwell_std_dev_s": 45},
+  {"code": "HPT", "name": "Hosapete Junction", "has_loop": true, "num_loops": 1, "num_platforms": 3, "max_train_len_m": 600, "is_junction": true, "dwell_mean_s": 150, "dwell_std_dev_s": 30},
+  {"code": "GDG", "name": "Gadag Junction", "has_loop": true, "num_loops": 1, "num_platforms": 3, "max_train_len_m": 600, "is_junction": true, "dwell_mean_s": 150, "dwell_std_dev_s": 30}
 ]
