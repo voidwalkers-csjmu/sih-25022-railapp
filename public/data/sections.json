@@ -1,17 +1,18 @@
+
 [
-  { "u": "SBC", "v": "YPR", "line_type": "double", "length_km": 5, "vmax_kmph": 60, "signalling": "automatic", "gradient": 0 },
-  { "u": "YPR", "v": "TK", "line_type": "single", "length_km": 64, "vmax_kmph": 100, "signalling": "absolute", "gradient": 0.5 },
-  { "u": "TK", "v": "ASK", "line_type": "single", "length_km": 97, "vmax_kmph": 100, "signalling": "absolute", "gradient": -0.2 },
-  { "u": "ASK", "v": "RRB", "line_type": "single", "length_km": 45, "vmax_kmph": 110, "signalling": "absolute", "gradient": 0 },
-  { "u": "RRB", "v": "DVG", "line_type": "double", "length_km": 66, "vmax_kmph": 110, "signalling": "absolute", "gradient": 0.3 },
-  { "u": "DVG", "v": "HRR", "line_type": "double", "length_km": 14, "vmax_kmph": 100, "signalling": "absolute", "gradient": 0 },
-  { "u": "HRR", "v": "RNR", "line_type": "double", "length_km": 23, "vmax_kmph": 120, "signalling": "absolute", "gradient": -0.1 },
-  { "u": "RNR", "v": "HVR", "line_type": "double", "length_km": 34, "vmax_kmph": 120, "signalling": "absolute", "gradient": 0 },
-  { "u": "HVR", "v": "UBL", "line_type": "double", "length_km": 75, "vmax_kmph": 110, "signalling": "absolute", "gradient": -0.4 },
-  { "u": "YPR", "v": "DMM", "line_type": "single", "length_km": 175, "vmax_kmph": 110, "signalling": "absolute", "gradient": 0.2 },
-  { "u": "DMM", "v": "ATP", "line_type": "double", "length_km": 33, "vmax_kmph": 120, "signalling": "absolute", "gradient": 0 },
-  { "u": "ATP", "v": "GTL", "line_type": "double", "length_km": 91, "vmax_kmph": 120, "signalling": "absolute", "gradient": 0.1 },
-  { "u": "GTL", "v": "HPT", "line_type": "single", "length_km": 91, "vmax_kmph": 100, "signalling": "absolute", "gradient": -0.3 },
-  { "u": "HPT", "v": "GDG", "line_type": "single", "length_km": 85, "vmax_kmph": 100, "signalling": "absolute", "gradient": 0 },
-  { "u": "GDG", "v": "UBL", "line_type": "double", "length_km": 58, "vmax_kmph": 110, "signalling": "absolute", "gradient": 0.2 }
+  {"u": "SBC", "v": "YPR", "line_type": "double", "length_km": 5, "vmax_kmph": 60, "signalling": "automatic"},
+  {"u": "YPR", "v": "TK", "line_type": "single", "length_km": 65, "vmax_kmph": 100, "signalling": "absolute"},
+  {"u": "TK", "v": "ASK", "line_type": "single", "length_km": 97, "vmax_kmph": 100, "signalling": "absolute"},
+  {"u": "ASK", "v": "RRB", "line_type": "double", "length_km": 55, "vmax_kmph": 110, "signalling": "absolute"},
+  {"u": "RRB", "v": "DVG", "line_type": "double", "length_km": 72, "vmax_kmph": 110, "signalling": "absolute"},
+  {"u": "DVG", "v": "HRR", "line_type": "double", "length_km": 13, "vmax_kmph": 100, "signalling": "absolute"},
+  {"u": "HRR", "v": "RNR", "line_type": "double", "length_km": 15, "vmax_kmph": 100, "signalling": "absolute"},
+  {"u": "RNR", "v": "HVR", "line_type": "double", "length_km": 24, "vmax_kmph": 110, "signalling": "absolute"},
+  {"u": "HVR", "v": "UBL", "line_type": "double", "length_km": 75, "vmax_kmph": 110, "signalling": "absolute"},
+  {"u": "SBC", "v": "DMM", "line_type": "single", "length_km": 191, "vmax_kmph": 90, "signalling": "absolute"},
+  {"u": "DMM", "v": "ATP", "line_type": "double", "length_km": 34, "vmax_kmph": 100, "signalling": "absolute"},
+  {"u": "ATP", "v": "GTL", "line_type": "double", "length_km": 87, "vmax_kmph": 110, "signalling": "absolute"},
+  {"u": "UBL", "v": "GDG", "line_type": "single", "length_km": 58, "vmax_kmph": 90, "signalling": "absolute"},
+  {"u": "ASK", "v": "HPT", "line_type": "single", "length_km": 145, "vmax_kmph": 90, "signalling": "absolute"},
+  {"u": "RNR", "v": "DVG", "line_type": "double", "length_km": 39, "vmax_kmph": 110, "signalling": "absolute"}
 ]
